@@ -12,9 +12,6 @@ class Order(models.Model):
         choices=Status.choices, default=Status.realizado, max_length=40
     )
     created_at = models.DateField(auto_now_add=True)
-    price = models.DecimalField(max_digits=8, decimal_places=2)
-    description = models.TextField()
-    category = models.CharField(max_length=20)
 
     buyer = models.ForeignKey(
         "users.User",

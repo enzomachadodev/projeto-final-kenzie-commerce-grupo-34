@@ -11,6 +11,7 @@ class Product(models.Model):
 
     cart = models.ManyToManyField(
         "carts.Cart",
+        through="products.CartProducts",
         related_name="cart_products",
     )
 
@@ -24,3 +25,19 @@ class Product(models.Model):
         "orders.Order",
         related_name="ordered_products",
     )
+
+
+class CartProducts(models.Model):
+    product = models.ForeignKey(
+        "products.Product",
+        on_delete=models.CASCADE,
+        related_name="products_cart_pivo",
+    )
+
+    cart = models.ForeignKey(
+        "carts.Cart",
+        on_delete=models.CASCADE,
+        related_name="cart_products_pivo",
+    )
+
+    quantity = models.IntegerField()
