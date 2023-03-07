@@ -48,7 +48,7 @@ class OrderProducts(models.Model):
     product = models.ForeignKey(
         "products.Product",
         on_delete=models.CASCADE,
-        related_name="products_cart_pivo",
+        related_name="products_order_pivo",
     )
 
     order = models.ForeignKey(
