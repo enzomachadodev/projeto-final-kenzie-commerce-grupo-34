@@ -4,6 +4,13 @@ from .models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    def update(self, instance: Product, validated_data: dict) -> Product:
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
+
+        return instance
+
     class Meta:
         model = Product
         fields = [
@@ -14,5 +21,9 @@ class ProductSerializer(serializers.ModelSerializer):
             "description",
             "category",
             "stock",
-            "seller_id",
+            "seller",
         ]
+        extra_kwargs = {
+            "seller": {"read_only": True},
+            "id": {"read_only": True},
+        }
