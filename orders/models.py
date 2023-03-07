@@ -11,6 +11,7 @@ class Order(models.Model):
     status = models.CharField(
         choices=Status.choices, default=Status.realizado, max_length=40
     )
+
     created_at = models.DateField(auto_now_add=True)
 
     buyer = models.ForeignKey(
@@ -19,5 +20,4 @@ class Order(models.Model):
         on_delete=models.CASCADE,
     )
 
-
-# Create your models here.
+    total = models.IntegerField()
