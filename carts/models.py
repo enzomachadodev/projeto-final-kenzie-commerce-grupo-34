@@ -1,9 +1,9 @@
 from django.db import models
 
 
-class Cart(models.Model):    
-    buyer = models.ForeignKey(
+class Cart(models.Model):
+    buyer = models.OneToOneField(
         "users.User",
-        related_name="user_cart",
+        related_name="cart",
         on_delete=models.CASCADE,
     )

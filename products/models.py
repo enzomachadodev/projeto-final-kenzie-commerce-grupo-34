@@ -12,7 +12,8 @@ class Product(models.Model):
     cart = models.ManyToManyField(
         "carts.Cart",
         through="products.CartProducts",
-        related_name="cart_products",
+        related_name="products",
+        
     )
 
     seller = models.ForeignKey(
@@ -41,7 +42,7 @@ class CartProducts(models.Model):
         related_name="cart_products_pivo",
     )
 
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=1)
 
 
 class OrderProducts(models.Model):
