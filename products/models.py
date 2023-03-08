@@ -1,4 +1,5 @@
 from django.db import models
+import ipdb
 
 
 class Product(models.Model):
@@ -13,7 +14,6 @@ class Product(models.Model):
         "carts.Cart",
         through="products.CartProducts",
         related_name="products",
-        
     )
 
     seller = models.ForeignKey(
@@ -43,6 +43,10 @@ class CartProducts(models.Model):
     )
 
     quantity = models.IntegerField(default=1)
+
+    @property
+    def cauculate_total(self):
+        return self.product.price * self.quantity
 
 
 class OrderProducts(models.Model):
