@@ -19,5 +19,3 @@ class Order(models.Model):
         related_name="user_orders",
         on_delete=models.CASCADE,
     )
-
-    total = models.IntegerField()

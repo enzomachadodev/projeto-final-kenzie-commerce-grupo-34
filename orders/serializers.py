@@ -8,11 +8,16 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         cart = validated_data.pop("cart")
 
-        return Order.objects.create(
-            **validated_data,
-            ordered_products=cart.cart_products,
-            total=cart.total,
+        order = Order.objects.create(
+            **validated_data
         )
+
+        # import ipdb
+        # ipdb.set_trace()
+
+        order.ordered_products.set(cart.products.all())
+        order.save()
+        return order
 
     def update(self, instance: Order, validated_data: dict) -> Order:
         if validated_data.get("status"):
@@ -31,5 +36,5 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["id", "status", "created_at", "buyer", "products", "total"]
-        read_only_fields = ["id", "created_at", "buyer", "products", "total"]
+        fields = ["id", "status", "created_at", "buyer", "products",]
+        read_only_fields = ["id", "created_at", "buyer", "products",]
