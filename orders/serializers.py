@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 from .models import Order, StatusOptions
+
 from products.serializers import ProductSerializer
 from products.models import OrderProducts
-
 
 
 def choices_error_message(choices_class):
@@ -11,6 +11,7 @@ def choices_error_message(choices_class):
     message = ", ".join(valid_choices).rsplit(",", 1)
 
     return "Choose between " + " and".join(message) + "."
+
 
 class OrderProductsSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)

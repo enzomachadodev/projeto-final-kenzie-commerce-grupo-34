@@ -1,5 +1,4 @@
 from django.db import models
-import ipdb
 
 
 class Cart(models.Model):

@@ -1,15 +1,20 @@
-from .serializers import CartSerializer
-from rest_framework.views import Response, status
-from rest_framework import generics
-from .models import Cart
-from products.models import Product, CartProducts
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-import ipdb
+
+from rest_framework import generics
+from rest_framework.views import Response, status
+from rest_framework.permissions import IsAuthenticated
+
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from .serializers import CartSerializer
+from .models import Cart
+
+from products.models import Product, CartProducts
 
 
-class ProductToCartView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView):
+class ProductToCartView(
+    generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView
+):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -23,7 +28,9 @@ class ProductToCartView(generics.CreateAPIView, generics.DestroyAPIView, generic
         product = get_object_or_404(Product, id=product_id)
         cart = get_object_or_404(Cart, buyer_id=request.user.id)
 
-        product_exist = CartProducts.objects.filter(cart_id=cart.id, product_id=product).first()
+        product_exist = CartProducts.objects.filter(
+            cart_id=cart.id, product_id=product
+        ).first()
 
         if product_exist:
             product_exist.quantity += 1

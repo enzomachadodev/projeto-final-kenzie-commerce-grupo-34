@@ -1,11 +1,13 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
+
 from .models import User
-from adresses.models import Address
-from adresses.serializers import AddressSerializer
+
 from carts.models import Cart
 from carts.serializers import CartSerializer
-from rest_framework.validators import UniqueValidator
-from django.contrib.auth.hashers import make_password
+
+from adresses.models import Address
+from adresses.serializers import AddressSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -46,7 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "is_seller",
             "address",
-            "cart"
+            "cart",
         ]
         extra_kwargs = {
             "password": {"write_only": True},

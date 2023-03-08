@@ -1,10 +1,13 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework import generics
+from rest_framework.views import Response
+from rest_framework.permissions import IsAuthenticated
+
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from .models import Order
 from .serializers import OrderSerializer
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-from rest_framework.views import Response
 from .permissions import IsCartNotEmptyOrReadOnly, IsSellerOrReadOnly
 
 

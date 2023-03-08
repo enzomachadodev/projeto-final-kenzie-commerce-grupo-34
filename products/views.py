@@ -1,9 +1,5 @@
-import ipdb
-from django.core.exceptions import ValidationError
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
-from rest_framework.views import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import Product
