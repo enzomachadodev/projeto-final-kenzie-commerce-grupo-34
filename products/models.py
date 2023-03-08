@@ -63,3 +63,7 @@ class OrderProducts(models.Model):
     )
 
     quantity = models.IntegerField()
+
+    @property
+    def calculate_total(self):
+        return self.product.price * self.quantity
