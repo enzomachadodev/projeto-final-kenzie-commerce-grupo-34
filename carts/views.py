@@ -9,14 +9,14 @@ from django.shortcuts import get_object_or_404
 import ipdb
 
 
-class ProductToCartView(generics.CreateAPIView, generics.DestroyAPIView):
+class ProductToCartView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
 
-    lookup_field = "product_id"
+    lookup_url_kwarg = "product_id"
 
     def create(self, request, *args, **kwargs):
         product_id = kwargs.get("product_id")
@@ -30,6 +30,7 @@ class ProductToCartView(generics.CreateAPIView, generics.DestroyAPIView):
             product_exist.save()
         else:
             cart.products.add(product)
+
         serializer = CartSerializer(cart)
 
         return Response(serializer.data, status.HTTP_200_OK)
