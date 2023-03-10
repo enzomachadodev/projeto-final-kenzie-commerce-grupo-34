@@ -183,7 +183,7 @@ class TestProductsView(APITestCase):
             "first_name": "josi",
             "last_name": "el",
             "is_seller": True,
-            "is_superuser": False,
+            "is_superuser": True,
             "address": {
               "street": "rua teste",
               "zip_code": "123456789",
