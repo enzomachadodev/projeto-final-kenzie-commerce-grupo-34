@@ -12,26 +12,22 @@ class TestUserRegistration(APITestCase):
 
     def test_create_user(self):
         user_data = {
-          "username": "gabriel",
-          "password": "1234",
-          "email": "gabriel@kenzie.com",
-          "first_name": "gabriel",
-          "last_name": "sobrenome",
-          "is_seller": True,
-          "is_superuser": True,
-          "address": {
-            "street": "rua teste",
-            "zip_code": "123456789",
-            "number": 47,
-            "city": "maceió",
-            "state": "alagoas"
-          }
+            "username": "gabriel",
+            "password": "1234",
+            "email": "gabriel@kenzie.com",
+            "first_name": "gabriel",
+            "last_name": "sobrenome",
+            "is_seller": True,
+            "is_superuser": True,
+            "address": {
+                "street": "rua teste",
+                "zip_code": "123456789",
+                "number": 47,
+                "city": "maceió",
+                "state": "alagoas",
+            },
         }
-        response = self.client.post(
-            self.BASE_URL,
-            data=user_data,
-            format='json'
-        )
+        response = self.client.post(self.BASE_URL, data=user_data, format="json")
 
         added_user = User.objects.last()
         added_address = Address.objects.last()
@@ -47,21 +43,17 @@ class TestUserRegistration(APITestCase):
             "is_superuser": True,
             "is_seller": True,
             "address": {
-              "id": added_address.pk,
-              "street": "rua teste",
-              "zip_code": "123456789",
-              "number": 47,
-              "complement": None,
-              "city": "maceió",
-              "state": "alagoas"
+                "id": added_address.pk,
+                "street": "rua teste",
+                "zip_code": "123456789",
+                "number": 47,
+                "complement": None,
+                "city": "maceió",
+                "state": "alagoas",
             },
-            "cart": {
-              "id": added_cart.pk,
-              "cart_products_pivo": [],
-              "cart_total": 0
-            }
+            "cart": {"id": added_cart.pk, "cart_products_pivo": [], "cart_total": 0},
         }
-        
+
         returned_data = response.json()
 
         msg = (
@@ -81,17 +73,17 @@ class TestUserRegistration(APITestCase):
         self.assertTrue(added_user.check_password(user_data["password"]), msg)
 
     def test_user_register_without_required_fields(self):
-        response = self.client.post(self.BASE_URL, data={}, format='json')
+        response = self.client.post(self.BASE_URL, data={}, format="json")
 
         resulted_data: dict = response.json()
 
         expected_fields = {
-          "username",
-          "password",
-          "email",
-          "first_name",
-          "last_name",
-          "address"
+            "username",
+            "password",
+            "email",
+            "first_name",
+            "last_name",
+            "address",
         }
 
         returned_fields = set(resulted_data.keys())
@@ -111,30 +103,27 @@ class TestUserRegistration(APITestCase):
 
     def test_create_non_unique_username_or_email_user(self):
         user_data = {
-          "username": "gabriel",
-          "password": "1234",
-          "email": "gabriel@kenzie.com",
-          "first_name": "gabriel",
-          "last_name": "sobrenome",
-          "is_seller": True,
-          "is_superuser": True,
-          "address": {
-            "street": "rua teste",
-            "zip_code": "123456789",
-            "number": 47,
-            "city": "maceió",
-            "state": "alagoas"
-          }
+            "username": "gabriel",
+            "password": "1234",
+            "email": "gabriel@kenzie.com",
+            "first_name": "gabriel",
+            "last_name": "sobrenome",
+            "is_seller": True,
+            "is_superuser": True,
+            "address": {
+                "street": "rua teste",
+                "zip_code": "123456789",
+                "number": 47,
+                "city": "maceió",
+                "state": "alagoas",
+            },
         }
 
-        self.client.post(self.BASE_URL, data=user_data, format='json')
-        response = self.client.post(self.BASE_URL, data=user_data, format='json')
+        self.client.post(self.BASE_URL, data=user_data, format="json")
+        response = self.client.post(self.BASE_URL, data=user_data, format="json")
 
-        expected_fields = {
-            "username",
-            "email"
-        }
-        
+        expected_fields = {"username", "email"}
+
         returned_data = response.json()
         returned_fields = set(returned_data.keys())
 

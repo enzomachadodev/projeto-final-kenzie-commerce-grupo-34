@@ -12,7 +12,7 @@ class Order(models.Model):
         choices=StatusOptions.choices, default=StatusOptions.REALIZADO, max_length=40
     )
 
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     buyer = models.ForeignKey(
         "users.User",
