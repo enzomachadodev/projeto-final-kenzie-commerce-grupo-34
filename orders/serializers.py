@@ -12,9 +12,11 @@ from .models import Order, StatusOptions
 from products.serializers import ProductSerializer
 from products.models import OrderProducts
 
+from users.models import User
 
 import smtplib
 from email.message import EmailMessage
+import ipdb
 
 dotenv.load_dotenv()
 
@@ -26,16 +28,26 @@ def choices_error_message(choices_class):
     return "Choose between " + " and".join(message) + "."
 
 
-def send_seller_email(seller_email, product_name, buyer):
-    body_message = f"""{buyer.first_name} {buyer.last_name} comprou {product_name}"""
+def send_seller_email(order):
+    body_message = f"""
+    Parabéns! Sua compra foi realizada com sucesso e chegará em breve.
+    \n
+    Id do pedido: {order.id}
+    \n
+    Loja: {order.seller.username}
+    \n
+    Data: {order.created_at}
+    \n
+    Status: {order.status}
+    \n
+    """
 
     email_address = os.getenv("DB_EMAIL")
     email_password = os.getenv("DB_EMAIL_PASSWORD_PYTHON")
-
     msg = EmailMessage()
-    msg["Subject"] = "Alguém comprou uma de suas mercadorias"
+    msg["Subject"] = "PEDIDO REALIZADO"
     msg["From"] = email_address
-    msg["To"] = seller_email
+    msg["To"] = order.buyer.email
     msg.set_content(body_message)
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
@@ -60,24 +72,26 @@ class OrderProductsSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         cart = validated_data.pop("cart")
-
-        order = Order.objects.create(**validated_data)
-
+        sellers = []
+        orders = []
         for cart_product_obj in cart.cart_products_pivo.all():
-            send_seller_email(
-                cart_product_obj.product.seller.email,
-                cart_product_obj.product.name,
-                order.buyer,
-            )
-            OrderProducts.objects.create(
-                order=order,
-                product=cart_product_obj.product,
-                quantity=cart_product_obj.quantity,
-            )
+            seller = cart_product_obj.product.seller
+            if seller not in sellers:
+                sellers.append(seller)
 
-        cart.products.clear()
-        order.save()
-        return order
+        for seller in sellers:
+            order = Order.objects.create(seller=seller, **validated_data)
+
+            for cart_product_obj in cart.cart_products_pivo.all():
+                if cart_product_obj.product.seller == seller:
+                    OrderProducts.objects.create(
+                        order=order,
+                        product=cart_product_obj.product,
+                        quantity=cart_product_obj.quantity,
+                    )
+            orders.append(order)
+            send_seller_email(order=order)
+        return orders
 
     def update(self, instance: Order, validated_data: dict) -> Order:
         if validated_data.get("status"):
@@ -104,6 +118,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "status",
             "created_at",
             "buyer",
+            "seller",
             "ordered_products",
             "order_total",
         ]
@@ -113,4 +128,5 @@ class OrderSerializer(serializers.ModelSerializer):
                     "invalid_choice": choices_error_message(StatusOptions),
                 }
             },
+            "seller": {"read_only": True},
         }

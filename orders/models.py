@@ -19,6 +19,11 @@ class Order(models.Model):
         related_name="user_orders",
         on_delete=models.CASCADE,
     )
+    seller = models.ForeignKey(
+        "users.User",
+        related_name="seller_orders",
+        on_delete=models.CASCADE,
+    )
 
     @property
     def calculate_total(self):
