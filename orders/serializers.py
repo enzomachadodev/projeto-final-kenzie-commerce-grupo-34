@@ -69,7 +69,7 @@ class ProductOrderSerializer(serializers.ModelSerializer):
 
 
 class OrderProductsSerializer(serializers.ModelSerializer):
-    product = ProductOrderSerializer(read_only=True, source='product')
+    product = ProductOrderSerializer(read_only=True)
     total_price = serializers.ReadOnlyField(source="calculate_total")
 
     class Meta:
