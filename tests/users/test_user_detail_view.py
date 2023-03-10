@@ -4,7 +4,7 @@ from tests.factories.user_factories import create_user_with_token
 from users.models import User
 
 
-class TestUserRegistration(APITestCase):
+class TestUserDetailView(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.user_1, token_1 = create_user_with_token()
@@ -52,15 +52,37 @@ class TestUserRegistration(APITestCase):
     def test_get_user_with_another_user_token(self):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.access_token_2)
         response = self.client.get(self.BASE_URL, format="json")
-        expected_status_code = status.HTTP_403_FORBIDDEN
+        expected_status_code = status.HTTP_200_OK
         msg = (
             "Verifique se o status code retornado do GET sem token correto "
             + f"em `{self.BASE_URL}` é {expected_status_code}"
         )
         self.assertEqual(expected_status_code, response.status_code, msg)
         expected_message = {
-            "detail": "You do not have permission to perform this action."
+            "id": self.user_1.pk,
+            "username": self.user_1.username,
+            "email": self.user_1.email,
+            "first_name": self.user_1.first_name,
+            "last_name": self.user_1.last_name,
+            "photo_url": self.user_1.photo_url,
+            "is_superuser": self.user_1.is_superuser,
+            "is_seller": self.user_1.is_seller,
+            "address": {
+                "id": self.user_1.address.pk,
+                "street": self.user_1.address.street,
+                "zip_code": self.user_1.address.zip_code,
+                "number": self.user_1.address.number,
+                "complement": self.user_1.address.complement,
+                "city": self.user_1.address.city,
+                "state": self.user_1.address.state
+            },
+            "cart": {
+                "id": self.user_1.cart.pk,
+                "cart_products_pivo": [],
+                "cart_total": 0
+            }
         }
+
         resulted_message = response.json()
         msg = (
             f"Verifique se a mensagem retornada do GET em {self.BASE_URL} está correta"
@@ -135,7 +157,7 @@ class TestUserRegistration(APITestCase):
         expected_status_code = status.HTTP_403_FORBIDDEN
 
         msg = (
-            "Verifique se o status code retornado com token de outra conta "
+            "Verifique se o status code retornado no PATCH com token de outra conta "
             + f"em `{self.BASE_URL}` é {expected_status_code}"
         )
         self.assertEqual(expected_status_code, response.status_code, msg)
@@ -237,7 +259,7 @@ class TestUserRegistration(APITestCase):
 
         msg = f"Verifique se a mensagem retornada do DELETE em {self.BASE_URL} está correta"
         self.assertDictEqual(expected_data, response_data, msg)
-
+  
     def test_delete_user_with_correct_user_token(self):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.access_token_1)
         response = self.client.delete(self.BASE_URL, format="json")

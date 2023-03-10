@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 
 
-class TestUserRegistration(APITestCase):
+class TestUserLogin(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.BASE_URL = "/api/login/"
