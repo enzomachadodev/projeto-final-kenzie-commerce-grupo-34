@@ -13,3 +13,16 @@ class IsCartNotEmptyOrReadOnly(permissions.BasePermission):
 class IsSellerOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view: View) -> bool:
         return request.method in permissions.SAFE_METHODS or request.user.is_seller
+
+
+class IsProductAvailableOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view: View) -> bool:
+        
+        if request.method == 'GET':
+            return True
+        
+        for product in request.user.cart.products.all():
+            if product.stock == 0:
+                return False
+        return True
+
