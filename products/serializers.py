@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Product, CartProducts
+from .models import CartProducts, Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -11,6 +11,16 @@ class ProductSerializer(serializers.ModelSerializer):
 
         return instance
 
+    is_avaliable = serializers.SerializerMethodField()
+
+    def get_is_avaliable(self, obj: Product):
+        stock = obj.stock
+        if stock > 0:
+            obj.is_avaliable = True
+        else:
+            obj.is_avaliable = False
+        return obj.is_avaliable
+
     class Meta:
         model = Product
         fields = [
@@ -20,6 +30,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "description",
             "category",
+            "is_avaliable",
             "stock",
             "seller",
         ]
