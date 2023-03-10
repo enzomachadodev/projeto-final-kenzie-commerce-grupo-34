@@ -10,7 +10,7 @@ from rest_framework import serializers
 from .models import Order, StatusOptions
 
 from products.serializers import ProductSerializer
-from products.models import OrderProducts
+from products.models import OrderProducts, Product
 
 from users.models import User
 
@@ -28,9 +28,9 @@ def choices_error_message(choices_class):
     return "Choose between " + " and".join(message) + "."
 
 
-def send_seller_email(order):
+def send_seller_email(order, message):
     body_message = f"""
-    Parabéns! Sua compra foi realizada com sucesso e chegará em breve.
+    {message}
     \n
     Id do pedido: {order.id}
     \n
@@ -55,8 +55,22 @@ def send_seller_email(order):
         smtp.send_message(msg)
 
 
+class ProductOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "name",
+            "image_url",
+            "price",
+            "description",
+            "category",
+            "seller",
+        ]
+
+
 class OrderProductsSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)
+    product = ProductOrderSerializer(read_only=True)
     total_price = serializers.ReadOnlyField(source="calculate_total")
 
     class Meta:
@@ -89,14 +103,24 @@ class OrderSerializer(serializers.ModelSerializer):
                         product=cart_product_obj.product,
                         quantity=cart_product_obj.quantity,
                     )
+                    cart_product_obj.product.stock -= 1
+                    cart_product_obj.product.save()
+
             orders.append(order)
-            send_seller_email(order=order)
+            email_message = (
+                "Parabéns! Sua compra foi realizada com sucesso e chegará em breve."
+            )
+            send_seller_email(order=order, message=email_message)
+
+        cart.products.clear()
         return orders
 
     def update(self, instance: Order, validated_data: dict) -> Order:
         if validated_data.get("status"):
             instance.status = validated_data["status"]
             instance.save()
+            email_message = "O Status do seu pedido foi atualizado"
+            send_seller_email(order=instance, message=email_message)
         return instance
 
     buyer = serializers.CharField(

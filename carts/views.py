@@ -32,6 +32,11 @@ class ProductToCartView(
             cart_id=cart.id, product_id=product
         ).first()
 
+        if product.stock == 0:
+            return Response(
+                {"detail": "Product not in stock"}, status.HTTP_403_FORBIDDEN
+            )
+
         if product_exist:
             product_exist.quantity += 1
             product_exist.save()
