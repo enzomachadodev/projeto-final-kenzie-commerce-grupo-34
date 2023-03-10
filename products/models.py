@@ -8,7 +8,7 @@ class Product(models.Model):
     description = models.TextField()
     category = models.CharField(max_length=20)
     stock = models.IntegerField()
-
+    is_avaliable = models.BooleanField(default=True)
     cart = models.ManyToManyField(
         "carts.Cart",
         through="products.CartProducts",
