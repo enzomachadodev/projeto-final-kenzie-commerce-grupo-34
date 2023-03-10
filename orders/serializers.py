@@ -93,7 +93,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 sellers.append(seller)
 
         for seller in sellers:
-            order = Order.objects.create(seller_id=seller.id, **validated_data)
+            order = Order.objects.create(seller=seller, **validated_data)
 
             for cart_product_obj in cart.cart_products_pivo.all():
                 if cart_product_obj.product.seller == seller:
@@ -105,6 +105,9 @@ class OrderSerializer(serializers.ModelSerializer):
             orders.append(order)
             email_message =  'Parabéns! Sua compra foi realizada com sucesso e chegará em breve.'
             send_seller_email(order=order, message= email_message)
+
+        cart.clear()
+        cart.save()
         return orders
 
     def update(self, instance: Order, validated_data: dict) -> Order:

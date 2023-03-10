@@ -4,6 +4,8 @@ from rest_framework.views import View
 
 class IsCartNotEmptyOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view: View) -> bool:
+        self.message = 'Your cart is empty'
+
         return (
             request.method in permissions.SAFE_METHODS
             or len(request.user.cart.products.all()) > 0
@@ -12,12 +14,15 @@ class IsCartNotEmptyOrReadOnly(permissions.BasePermission):
 
 class IsSellerOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view: View) -> bool:
+        self.message = 'You are not a seller or administrator'
+
         return request.method in permissions.SAFE_METHODS or request.user.is_seller
 
 
 class IsProductAvailableOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view: View) -> bool:
-        
+        self.message = 'Product not in stock'
+
         if request.method == 'GET':
             return True
         
