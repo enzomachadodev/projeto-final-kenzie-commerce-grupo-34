@@ -4,19 +4,36 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Order',
+            name="Order",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.CharField(choices=[('PEDIDO REALIZADO', 'Realizado'), ('EM ANDAMENTO', 'Andamento'), ('ENTREGUE', 'Entregue')], default='PEDIDO REALIZADO', max_length=40)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("PEDIDO REALIZADO", "Realizado"),
+                            ("EM ANDAMENTO", "Andamento"),
+                            ("ENTREGUE", "Entregue"),
+                        ],
+                        default="PEDIDO REALIZADO",
+                        max_length=40,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
             ],
         ),
     ]

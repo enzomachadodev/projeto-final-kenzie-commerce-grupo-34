@@ -54,6 +54,7 @@ def send_seller_email(order, message):
         smtp.login(email_address, email_password)
         smtp.send_message(msg)
 
+
 class ProductOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
@@ -102,19 +103,23 @@ class OrderSerializer(serializers.ModelSerializer):
                         product=cart_product_obj.product,
                         quantity=cart_product_obj.quantity,
                     )
-            orders.append(order)
-            email_message =  'Parabéns! Sua compra foi realizada com sucesso e chegará em breve.'
-            send_seller_email(order=order, message= email_message)
+                    cart_product_obj.product.stock -= 1
+                    cart_product_obj.product.save()
 
-        cart.clear()
-        cart.save()
+            orders.append(order)
+            email_message = (
+                "Parabéns! Sua compra foi realizada com sucesso e chegará em breve."
+            )
+            send_seller_email(order=order, message=email_message)
+
+        cart.products.clear()
         return orders
 
     def update(self, instance: Order, validated_data: dict) -> Order:
         if validated_data.get("status"):
             instance.status = validated_data["status"]
             instance.save()
-            email_message = 'O Status do seu pedido foi atualizado'
+            email_message = "O Status do seu pedido foi atualizado"
             send_seller_email(order=instance, message=email_message)
         return instance
 

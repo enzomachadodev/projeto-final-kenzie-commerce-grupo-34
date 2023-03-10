@@ -9,13 +9,21 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import Order
 from .serializers import OrderSerializer
-from .permissions import IsCartNotEmptyOrReadOnly, IsSellerOrReadOnly, IsProductAvailableOrReadOnly
+from .permissions import (
+    IsCartNotEmptyOrReadOnly,
+    IsSellerOrReadOnly,
+    IsProductAvailableOrReadOnly,
+)
 import ipdb
 
 
 class OrderView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsCartNotEmptyOrReadOnly, IsProductAvailableOrReadOnly]
+    permission_classes = [
+        IsAuthenticated,
+        IsCartNotEmptyOrReadOnly,
+        IsProductAvailableOrReadOnly,
+    ]
 
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
