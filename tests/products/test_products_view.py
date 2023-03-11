@@ -252,6 +252,7 @@ class TestProductsView(APITestCase):
           "description": response.data["description"],
           "category": response.data["category"],
           "stock": response.data["stock"],
+          "is_avaliable": True,
           "seller": user.pk
         }
         response_data = response.json()
@@ -260,3 +261,92 @@ class TestProductsView(APITestCase):
             + f"em `{self.BASE_URL}` é {expected_data}"
         )
         self.assertEqual(expected_data, response_data, msg)
+
+    def test_delete_product_without_token(self):
+        response = self.client.delete(self.BASE_URL, format='json')
+
+        expected_status_code = status.HTTP_401_UNAUTHORIZED
+        msg = (
+            "Verifique se o status code retornado do DELETE sem token "
+            + f"em `{self.BASE_URL}` é {expected_status_code}"
+        )
+        self.assertEqual(expected_status_code, response.status_code, msg)
+
+        expected_data = {"detail": "Authentication credentials were not provided."}
+        response_data = response.json()
+        msg = (
+            "Verifique se os dados retornados do DELETE sem token "
+            + f"em `{self.BASE_URL}` é {expected_data}"
+        )
+        self.assertDictEqual(expected_data, response_data, msg)
+
+    def test_delete_product_without_been_owner(self):
+        owner, token1 = create_user_with_token()
+        self.client.credentials(
+                HTTP_AUTHORIZATION="Bearer " + str(token1.access_token)
+        )
+        product_data = {
+          "name": "produto1",
+          "price": 200.00,
+          "description": "Um produto",
+          "category": "Categoria Teste",
+          "stock": 100
+        }
+        product = self.client.post(self.BASE_URL, data=product_data, format='json')
+
+        user_data = {
+            "username": "josiel",
+            "password": "1234",
+            "email": "josiel@kenzie.com",
+            "first_name": "josi",
+            "last_name": "el",
+            "is_seller": True,
+            "is_superuser": True,
+            "address": {
+              "street": "rua teste",
+              "zip_code": "123456789",
+              "number": 47,
+              "city": "testando",
+              "state": "mg"
+            }
+        }
+        user, token2 = create_user_with_token(user_data)
+        self.client.credentials(
+                HTTP_AUTHORIZATION="Bearer " + str(token2.access_token)
+        )
+
+        response = self.client.delete(f"{self.BASE_URL}{product.data['id']}/", format='json')
+        expected_status_code = status.HTTP_401_UNAUTHORIZED
+        msg = (
+            "Verifique se o status code retornado do PATCH com token de outro usuário "
+            + f"em `{self.BASE_URL}{product.data['id']}` é {expected_status_code}"
+        )
+        self.assertEqual(expected_status_code, response.status_code, msg)
+
+        expected_data = {"detail": "Authentication credentials were not provided."}
+        response_data = response.json()
+        msg = (
+            "Verifique se os dados retornados do PATCH com token correto em "
+            + f"em `{self.BASE_URL}` é {expected_data}"
+        )
+        self.assertDictEqual(expected_data, response_data, msg)
+
+    def test_delete_product(self):
+        user, token = create_user_with_token()
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token.access_token))
+        product_data = {
+          "name": "produto",
+          "price": 200.00,
+          "description": "Um produto",
+          "category": "Categoria Teste",
+          "stock": 100
+        }
+        product = self.client.post(self.BASE_URL, data=product_data, format='json')
+        response = self.client.delete(f"{self.BASE_URL}{product.data['id']}", format="json")
+
+        expected_status_code = status.HTTP_204_NO_CONTENT
+        msg = (
+            "Verifique se o status code retornado do DELETE com token correto "
+            + f"em {self.BASE_URL}{product.data['id']} é {expected_status_code}"
+        )
+        self.assertEqual(expected_status_code, response.status_code, msg)
