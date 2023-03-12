@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .serializers import CartSerializer
+from .serializers import CartSerializer, CartUpdateSerializer
 from .models import Cart
 
 from products.models import Product, CartProducts
@@ -45,6 +45,29 @@ class ProductToCartView(
 
         serializer = CartSerializer(cart)
 
+        return Response(serializer.data, status.HTTP_200_OK)
+
+    def update(self, request, *args, **kwargs):
+        product_id = kwargs.get("product_id")
+        product = get_object_or_404(Product, id=product_id)
+        cart = get_object_or_404(Cart, buyer_id=request.user.id)
+
+        product_exist = CartProducts.objects.filter(
+            cart_id=cart.id, product_id=product
+        ).first()
+
+        if not product_exist:
+            return Response(
+                {"detail": "Product not in your cart"}, status.HTTP_403_FORBIDDEN
+            )
+
+        serializer_request = CartUpdateSerializer(data=request.data)
+        serializer_request.is_valid(raise_exception=True)
+
+        product_exist.quantity = serializer_request.validated_data["quantity"]
+        product_exist.save()
+
+        serializer = CartSerializer(cart)
         return Response(serializer.data, status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):

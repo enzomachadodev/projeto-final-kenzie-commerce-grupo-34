@@ -103,7 +103,7 @@ class OrderSerializer(serializers.ModelSerializer):
                         product=cart_product_obj.product,
                         quantity=cart_product_obj.quantity,
                     )
-                    cart_product_obj.product.stock -= 1
+                    cart_product_obj.product.stock -= cart_product_obj.quantity
                     cart_product_obj.product.save()
 
             orders.append(order)
