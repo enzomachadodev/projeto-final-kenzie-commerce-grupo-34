@@ -74,11 +74,11 @@ class TestProductsView(APITestCase):
 
     def test_create_product(self):
         product_data = {
-          "name": "produto1",
-          "price": 200.00,
-          "description": "Um produto",
-          "category": "Categoria Teste",
-          "stock": 100
+            "name": "Cake",
+            "price": 25,
+            "description": "The cake is a lie",
+            "category": "Bakery",
+            "stock": 4
         }
         user, token = create_user_with_token()
         self.client.credentials(
@@ -94,12 +94,13 @@ class TestProductsView(APITestCase):
 
         expected_data = {
             "id": 1,
-            "name": "produto1",
+            "name": "Cake",
             "image_url": None,
-            "price": "200.00",
-            "description": "Um produto",
-            "category": "Categoria Teste",
-            "stock": 100,
+            "price": "25.00",
+            "description": "The cake is a lie",
+            "category": "Bakery",
+            "is_avaliable": True,
+            "stock": 4,
             "seller": user.pk
         }
         response_data = response.json()
@@ -333,7 +334,9 @@ class TestProductsView(APITestCase):
 
     def test_delete_product(self):
         user, token = create_user_with_token()
-        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token.access_token))
+        self.client.credentials(
+            HTTP_AUTHORIZATION="Bearer " + str(token.access_token)
+        )
         product_data = {
           "name": "produto",
           "price": 200.00,
