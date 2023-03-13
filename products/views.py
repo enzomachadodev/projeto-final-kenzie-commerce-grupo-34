@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import Product
-from .permission import IsSellerOrAdminOrReadOnly
+from .permission import IsSellerOrAdminOrReadOnly, IsProductOwner
 from .serializers import ProductSerializer
 
 
@@ -36,7 +36,7 @@ class ProductCategoryNameView(generics.ListAPIView):
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsSellerOrAdminOrReadOnly]
+    permission_classes = [IsSellerOrAdminOrReadOnly, IsProductOwner]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 

@@ -6,40 +6,59 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('products', '0001_initial'),
-        ('carts', '0002_initial'),
-        ('orders', '0002_initial'),
+        ("products", "0001_initial"),
+        ("carts", "0002_initial"),
+        ("orders", "0002_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='seller',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_products', to=settings.AUTH_USER_MODEL),
+            model_name="product",
+            name="seller",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="user_products",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='orderproducts',
-            name='order',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='order_products_pivo', to='orders.order'),
+            model_name="orderproducts",
+            name="order",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="order_products_pivo",
+                to="orders.order",
+            ),
         ),
         migrations.AddField(
-            model_name='orderproducts',
-            name='product',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products_order_pivo', to='products.product'),
+            model_name="orderproducts",
+            name="product",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="products_order_pivo",
+                to="products.product",
+            ),
         ),
         migrations.AddField(
-            model_name='cartproducts',
-            name='cart',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cart_products_pivo', to='carts.cart'),
+            model_name="cartproducts",
+            name="cart",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="cart_products_pivo",
+                to="carts.cart",
+            ),
         ),
         migrations.AddField(
-            model_name='cartproducts',
-            name='product',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products_cart_pivo', to='products.product'),
+            model_name="cartproducts",
+            name="product",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="products_cart_pivo",
+                to="products.product",
+            ),
         ),
     ]

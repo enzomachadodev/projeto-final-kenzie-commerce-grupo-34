@@ -5,7 +5,6 @@ from products.serializers import ProductSerializer, CartProductsSerializer
 
 
 class CartSerializer(serializers.ModelSerializer):
-
     cart_products_pivo = CartProductsSerializer(read_only=True, many=True)
     cart_total = serializers.ReadOnlyField(source="cauculate_total")
 
