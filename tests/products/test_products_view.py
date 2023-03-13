@@ -1,13 +1,16 @@
 from rest_framework.test import APITestCase
 from rest_framework.views import status
 from tests.factories.user_factories import create_user_with_token
-from tests.factories.product_factories import create_product_with_user, create_multiple_products_with_user
+from tests.factories.product_factories import (
+    create_product_with_user,
+    create_multiple_products_with_user,
+)
 
 
 class TestProductsView(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
-        cls.BASE_URL = '/api/products/'
+        cls.BASE_URL = "/api/products/"
 
     """ def test_products_listing_pagination(self):
         user, token = create_user_with_token()
@@ -30,37 +33,31 @@ class TestProductsView(APITestCase):
     def test_create_product_without_required_fields(self):
         user, token = create_user_with_token()
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token.access_token))
-        response = self.client.post(self.BASE_URL, data={}, format='json')
+        response = self.client.post(self.BASE_URL, data={}, format="json")
 
         expected_status_code = status.HTTP_400_BAD_REQUEST
         msg = (
-                "Verifique se o status code retornado do POST sem todos os "
-                + f"campos obrigatórios em `{self.BASE_URL}` é {expected_status_code}"
-            )
+            "Verifique se o status code retornado do POST sem todos os "
+            + f"campos obrigatórios em `{self.BASE_URL}` é {expected_status_code}"
+        )
         self.assertEqual(expected_status_code, response.status_code, msg)
 
         response_data: dict = response.json()
-        expected_fields = {
-            "name",
-            "price",
-            "description",
-            "category",
-            "stock"
-        }
+        expected_fields = {"name", "price", "description", "category", "stock"}
         returned_fields = set(response_data.keys())
         msg = (
-                "Verifique se todas as chaves obrigatórias "
-                + f"são retornadas ao tentar criar um produto sem dados"
-            )
+            "Verifique se todas as chaves obrigatórias "
+            + f"são retornadas ao tentar criar um produto sem dados"
+        )
 
         self.assertEqual(expected_fields, returned_fields, msg)
 
     def test_create_product_without_token(self):
-        response = self.client.post(self.BASE_URL, data={}, format='json')
+        response = self.client.post(self.BASE_URL, data={}, format="json")
         expected_status_code = status.HTTP_401_UNAUTHORIZED
         msg = (
-                "Verifique se o status code retornado do POST "
-                + f"em `{self.BASE_URL}` é {expected_status_code}"
+            "Verifique se o status code retornado do POST "
+            + f"em `{self.BASE_URL}` é {expected_status_code}"
         )
         self.assertEqual(expected_status_code, response.status_code, msg)
 
@@ -78,17 +75,15 @@ class TestProductsView(APITestCase):
             "price": 25,
             "description": "The cake is a lie",
             "category": "Bakery",
-            "stock": 4
+            "stock": 4,
         }
         user, token = create_user_with_token()
-        self.client.credentials(
-            HTTP_AUTHORIZATION="Bearer " + str(token.access_token)
-        )
-        response = self.client.post(self.BASE_URL, data=product_data, format='json')
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token.access_token))
+        response = self.client.post(self.BASE_URL, data=product_data, format="json")
         expected_status_code = status.HTTP_201_CREATED
         msg = (
-                "Verifique se o status code retornado do POST "
-                + f"em `{self.BASE_URL}` é {expected_status_code}"
+            "Verifique se o status code retornado do POST "
+            + f"em `{self.BASE_URL}` é {expected_status_code}"
         )
         self.assertEqual(expected_status_code, response.status_code, msg)
 
@@ -101,7 +96,7 @@ class TestProductsView(APITestCase):
             "category": "Bakery",
             "is_avaliable": True,
             "stock": 4,
-            "seller": user.pk
+            "seller": user.pk,
         }
         response_data = response.json()
         msg = (
@@ -120,34 +115,32 @@ class TestProductsView(APITestCase):
             "is_seller": False,
             "is_superuser": False,
             "address": {
-              "street": "rua teste",
-              "zip_code": "123456789",
-              "number": 47,
-              "city": "maceió",
-              "state": "alagoas"
-            }
+                "street": "rua teste",
+                "zip_code": "123456789",
+                "number": 47,
+                "city": "maceió",
+                "state": "alagoas",
+            },
         }
         user, token = create_user_with_token(user_data)
         product_data = {
-          "name": "produto1",
-          "price": 200.00,
-          "description": "Um produto",
-          "category": "Categoria Teste",
-          "stock": 100
+            "name": "produto1",
+            "price": 200.00,
+            "description": "Um produto",
+            "category": "Categoria Teste",
+            "stock": 100,
         }
-        self.client.credentials(
-            HTTP_AUTHORIZATION="Bearer " + str(token.access_token)
-        )
-        response = self.client.post(self.BASE_URL, data=product_data, format='json')
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token.access_token))
+        response = self.client.post(self.BASE_URL, data=product_data, format="json")
         expected_status_code = status.HTTP_403_FORBIDDEN
         msg = (
-                "Verifique se o status code retornado do POST "
-                + f"em `{self.BASE_URL}` é {expected_status_code}"
+            "Verifique se o status code retornado do POST "
+            + f"em `{self.BASE_URL}` é {expected_status_code}"
         )
         self.assertEqual(expected_status_code, response.status_code, msg)
 
     def test_update_products_without_token(self):
-        response = self.client.patch(self.BASE_URL, format='json')
+        response = self.client.patch(self.BASE_URL, format="json")
         expected_status_code = status.HTTP_401_UNAUTHORIZED
         msg = (
             "Verifique se o status code retornado do PATCH sem token "
@@ -163,19 +156,17 @@ class TestProductsView(APITestCase):
         )
         self.assertDictEqual(expected_data, response_data, msg)
 
-    def test_update_products_without_been_owner(self):
+    def test_update_product_without_been_owner(self):
         owner, token1 = create_user_with_token()
-        self.client.credentials(
-                HTTP_AUTHORIZATION="Bearer " + str(token1.access_token)
-        )
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token1.access_token))
         product_data = {
-          "name": "produto1",
-          "price": 200.00,
-          "description": "Um produto",
-          "category": "Categoria Teste",
-          "stock": 100
+            "name": "produto1",
+            "price": 200.00,
+            "description": "Um produto",
+            "category": "Categoria Teste",
+            "stock": 100,
         }
-        product = self.client.post(self.BASE_URL, data=product_data, format='json')
+        product = self.client.post(self.BASE_URL, data=product_data, format="json")
 
         user_data = {
             "username": "josiel",
@@ -186,30 +177,27 @@ class TestProductsView(APITestCase):
             "is_seller": True,
             "is_superuser": True,
             "address": {
-              "street": "rua teste",
-              "zip_code": "123456789",
-              "number": 47,
-              "city": "testando",
-              "state": "mg"
-            }
+                "street": "rua teste",
+                "zip_code": "123456789",
+                "number": 47,
+                "city": "testando",
+                "state": "mg",
+            },
         }
         user, token2 = create_user_with_token(user_data)
-        self.client.credentials(
-                HTTP_AUTHORIZATION="Bearer " + str(token2.access_token)
-        )
-        patch_data = {
-          "name": "produto_PATCHED",
-          "price": 20.00
-        }
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token2.access_token))
+        patch_data = {"name": "produto_PATCHED", "price": 20.00}
 
-        response = self.client.patch(f"{self.BASE_URL}{product.data['id']}/", data=patch_data, format='json')
-        expected_status_code = status.HTTP_401_UNAUTHORIZED
+        response = self.client.patch(
+            f"{self.BASE_URL}{product.data['id']}/", data=patch_data, format="json"
+        )
+        expected_status_code = status.HTTP_403_FORBIDDEN
         msg = (
             "Verifique se o status code retornado do PATCH com token correto "
             + f"em `{self.BASE_URL}{product.data['id']}` é {expected_status_code}"
         )
         self.assertEqual(expected_status_code, response.status_code, msg)
-        expected_data = {"detail": "Authentication credentials were not provided."}
+        expected_data = {"detail": "You do not have permission to perform this action."}
         response_data = response.json()
         msg = (
             "Verifique se os dados retornados do PATCH com token correto em "
@@ -219,25 +207,25 @@ class TestProductsView(APITestCase):
 
     def test_update_product(self):
         user, token = create_user_with_token()
-        self.client.credentials(
-                HTTP_AUTHORIZATION="Bearer " + str(token.access_token)
-        )
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token.access_token))
         product_data = {
-          "name": "produto1",
-          "price": 200.00,
-          "description": "Um produto",
-          "category": "Categoria Teste",
-          "stock": 100
-        }       
-        product = self.client.post(self.BASE_URL, data=product_data, format='json')
-        patch_data = {
-          "name": "ALTEREI O PRODUTO",
-          "price": 6.99,
-          "description": "outra coisa",
-          "category": "FUNCIONA",
-          "stock": 50	
+            "name": "produto1",
+            "price": 200.00,
+            "description": "Um produto",
+            "category": "Categoria Teste",
+            "stock": 100,
         }
-        response = self.client.patch(f"{self.BASE_URL}{product.data['id']}/", data=patch_data, format='json')
+        product = self.client.post(self.BASE_URL, data=product_data, format="json")
+        patch_data = {
+            "name": "ALTEREI O PRODUTO",
+            "price": 6.99,
+            "description": "outra coisa",
+            "category": "FUNCIONA",
+            "stock": 50,
+        }
+        response = self.client.patch(
+            f"{self.BASE_URL}{product.data['id']}/", data=patch_data, format="json"
+        )
         expected_status_code = status.HTTP_200_OK
         msg = (
             "Verifique se o status code retornado do PATCH sem token correto "
@@ -246,15 +234,15 @@ class TestProductsView(APITestCase):
         self.assertEqual(expected_status_code, response.status_code, msg)
 
         expected_data = {
-          "id": product.data['id'],
-          "name": response.data["name"],
-          "image_url": None,
-          "price": response.data["price"],
-          "description": response.data["description"],
-          "category": response.data["category"],
-          "stock": response.data["stock"],
-          "is_avaliable": True,
-          "seller": user.pk
+            "id": product.data["id"],
+            "name": response.data["name"],
+            "image_url": None,
+            "price": response.data["price"],
+            "description": response.data["description"],
+            "category": response.data["category"],
+            "stock": response.data["stock"],
+            "is_avaliable": True,
+            "seller": user.pk,
         }
         response_data = response.json()
         msg = (
@@ -264,7 +252,7 @@ class TestProductsView(APITestCase):
         self.assertEqual(expected_data, response_data, msg)
 
     def test_delete_product_without_token(self):
-        response = self.client.delete(self.BASE_URL, format='json')
+        response = self.client.delete(self.BASE_URL, format="json")
 
         expected_status_code = status.HTTP_401_UNAUTHORIZED
         msg = (
@@ -283,17 +271,15 @@ class TestProductsView(APITestCase):
 
     def test_delete_product_without_been_owner(self):
         owner, token1 = create_user_with_token()
-        self.client.credentials(
-                HTTP_AUTHORIZATION="Bearer " + str(token1.access_token)
-        )
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token1.access_token))
         product_data = {
-          "name": "produto1",
-          "price": 200.00,
-          "description": "Um produto",
-          "category": "Categoria Teste",
-          "stock": 100
+            "name": "produto1",
+            "price": 200.00,
+            "description": "Um produto",
+            "category": "Categoria Teste",
+            "stock": 100,
         }
-        product = self.client.post(self.BASE_URL, data=product_data, format='json')
+        product = self.client.post(self.BASE_URL, data=product_data, format="json")
 
         user_data = {
             "username": "josiel",
@@ -304,27 +290,27 @@ class TestProductsView(APITestCase):
             "is_seller": True,
             "is_superuser": True,
             "address": {
-              "street": "rua teste",
-              "zip_code": "123456789",
-              "number": 47,
-              "city": "testando",
-              "state": "mg"
-            }
+                "street": "rua teste",
+                "zip_code": "123456789",
+                "number": 47,
+                "city": "testando",
+                "state": "mg",
+            },
         }
         user, token2 = create_user_with_token(user_data)
-        self.client.credentials(
-                HTTP_AUTHORIZATION="Bearer " + str(token2.access_token)
-        )
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token2.access_token))
 
-        response = self.client.delete(f"{self.BASE_URL}{product.data['id']}/", format='json')
-        expected_status_code = status.HTTP_401_UNAUTHORIZED
+        response = self.client.delete(
+            f"{self.BASE_URL}{product.data['id']}/", format="json"
+        )
+        expected_status_code = status.HTTP_403_FORBIDDEN
         msg = (
             "Verifique se o status code retornado do PATCH com token de outro usuário "
             + f"em `{self.BASE_URL}{product.data['id']}` é {expected_status_code}"
         )
         self.assertEqual(expected_status_code, response.status_code, msg)
 
-        expected_data = {"detail": "Authentication credentials were not provided."}
+        expected_data = {"detail": "You do not have permission to perform this action."}
         response_data = response.json()
         msg = (
             "Verifique se os dados retornados do PATCH com token correto em "
@@ -334,18 +320,18 @@ class TestProductsView(APITestCase):
 
     def test_delete_product(self):
         user, token = create_user_with_token()
-        self.client.credentials(
-            HTTP_AUTHORIZATION="Bearer " + str(token.access_token)
-        )
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token.access_token))
         product_data = {
-          "name": "produto",
-          "price": 200.00,
-          "description": "Um produto",
-          "category": "Categoria Teste",
-          "stock": 100
+            "name": "produto",
+            "price": 200.00,
+            "description": "Um produto",
+            "category": "Categoria Teste",
+            "stock": 100,
         }
-        product = self.client.post(self.BASE_URL, data=product_data, format='json')
-        response = self.client.delete(f"{self.BASE_URL}{product.data['id']}", format="json")
+        product = self.client.post(self.BASE_URL, data=product_data, format="json")
+        response = self.client.delete(
+            f"{self.BASE_URL}{product.data['id']}/", format="json"
+        )
 
         expected_status_code = status.HTTP_204_NO_CONTENT
         msg = (

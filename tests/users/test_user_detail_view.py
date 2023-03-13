@@ -74,13 +74,13 @@ class TestUserDetailView(APITestCase):
                 "number": self.user_1.address.number,
                 "complement": self.user_1.address.complement,
                 "city": self.user_1.address.city,
-                "state": self.user_1.address.state
+                "state": self.user_1.address.state,
             },
             "cart": {
                 "id": self.user_1.cart.pk,
                 "cart_products_pivo": [],
-                "cart_total": 0
-            }
+                "cart_total": 0,
+            },
         }
 
         resulted_message = response.json()
@@ -259,7 +259,7 @@ class TestUserDetailView(APITestCase):
 
         msg = f"Verifique se a mensagem retornada do DELETE em {self.BASE_URL} está correta"
         self.assertDictEqual(expected_data, response_data, msg)
-  
+
     def test_delete_user_with_correct_user_token(self):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.access_token_1)
         response = self.client.delete(self.BASE_URL, format="json")
