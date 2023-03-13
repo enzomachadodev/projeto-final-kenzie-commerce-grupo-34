@@ -135,7 +135,7 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Kenzie_Commerce",
-    "DESCRIPTION": "Your project description",
+    "DESCRIPTION": "API desenvolvida em Django, com o objetivo de sustentar uma plataforma de e-commerce com diferentes níveis de acesso.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
