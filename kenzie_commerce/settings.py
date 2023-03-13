@@ -11,14 +11,13 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from django.core.management.utils import get_random_secret_key
-
 import os
+import dj_database_url
+import dotenv
 
 from datetime import timedelta
 from pathlib import Path
 
-import dotenv
-import dj_database_url
 
 dotenv.load_dotenv()
 
