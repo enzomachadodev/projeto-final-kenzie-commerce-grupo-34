@@ -1,5 +1,5 @@
 <h1 align="center">
-    ![kenzie commerce logo](https://user-images.githubusercontent.com/106446549/225076575-de3bd0f8-cf9f-4b3e-a22d-3860810df6a7.png)
+   ![kenzie commerce logo](https://user-images.githubusercontent.com/106446549/225076575-de3bd0f8-cf9f-4b3e-a22d-3860810df6a7.png) 
 </h1>
 
 ## 📃Conteúdos da Página:
