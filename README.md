@@ -16,7 +16,13 @@ No projeto final do M5 na Kenzie Academy Brasil, foi proposto desenvolver uma AP
 
 ## 👩🏻‍💻Ultilização
 
-A URL base da API é: [https://kenziecommerce34.onrender.com](https://kenziecommerce34.onrender.com)
+A URL base da API é:
+
+[https://kenziecommerce34.onrender.com](https://kenziecommerce34.onrender.com)
+
+Para ter acesso as informações sobre todas as rotas da aplicação acesse:
+
+[https://kenziecommerce34.onrender.com/api/docs/swagger-ui/](https://kenziecommerce34.onrender.com/api/docs/swagger-ui/)
 
 ## 💾Instalação
 
@@ -70,13 +76,17 @@ Pronto, agora você tem o projeto instalado e em execução em seu computador!
 
 ## 🖥️Rotas
 
-Para acessar as informações sobre todas as rotas do projeto acesse:
+A URL base da API é:
 
-[]
+[https://kenziecommerce34.onrender.com](https://kenziecommerce34.onrender.com)
+
+Para ter acesso as informações sobre todas as rotas da aplicação acesse:
+
+[https://kenziecommerce34.onrender.com/api/docs/swagger-ui/](https://kenziecommerce34.onrender.com/api/docs/swagger-ui/)
 
 ## Feito com 🤍 por:
 
-Enzo Machado - [@m4chado](https://github.com/m4chado) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/enzomachado01/)
+Enzo Machado - [![github](https://img.shields.io/badge/github-0A66C2?style=for-the-badge&logo=github&logoColor=white)](https://github.com/m4chado) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/enzomachado01/)
 
 Felipe Siqueira - [@FelipeSiqueiraDev](https://github.com/FelipeSiqueiraDev) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/felipe-o-siqueira/)
 
