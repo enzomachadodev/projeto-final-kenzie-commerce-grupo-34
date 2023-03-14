@@ -86,10 +86,10 @@ Para ter acesso as informações sobre todas as rotas da aplicação acesse:
 
 ## Feito com 🤍 por:
 
-Enzo Machado - [![github](https://img.shields.io/badge/github-0A66C2?style=for-the-badge&logo=github&logoColor=white)](https://github.com/m4chado) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/enzomachado01/)
+Enzo Machado - [![github](https://img.shields.io/badge/github-6e5494?style=for-the-badge&logo=github&logoColor=white)](https://github.com/m4chado) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/enzomachado01/)
 
-Felipe Siqueira - [@FelipeSiqueiraDev](https://github.com/FelipeSiqueiraDev) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/felipe-o-siqueira/)
+Felipe Siqueira - [![github](https://img.shields.io/badge/github-6e5494?style=for-the-badge&logo=github&logoColor=white)](https://github.com/FelipeSiqueiraDev) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/felipe-o-siqueira/)
 
-Gabriel Melo - [@g4br1elm3l0](https://github.com/g4br1elm3l0) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/gabrielmelo98dev/)
+Gabriel Melo - [![github](https://img.shields.io/badge/github-6e5494?style=for-the-badge&logo=github&logoColor=white)](https://github.com/g4br1elm3l0) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/gabrielmelo98dev/)
 
-Josiel Borges - [@ojosiels](https://github.com/ojosiels) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ojosiels/)
+Josiel Borges - [![github](https://img.shields.io/badge/github-6e5494?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ojosiels) - [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ojosiels/)
