@@ -13,7 +13,7 @@ class IsSellerOrAdminOrReadOnly(permissions.BasePermission):
             or request.user.is_authenticated
             and request.user.is_seller
         )
-    
+
 
 class IsProductOwner(permissions.BasePermission):
     def has_object_permission(self, request, view: View, obj: User):
